@@ -1,5 +1,9 @@
 package com.example.juristicsupport.controller;
 
+import com.example.juristicsupport.domain.UserMapper;
+import com.example.juristicsupport.domain.dto.UserCreateDto;
+import com.example.juristicsupport.domain.dto.UserDto;
+import com.example.juristicsupport.domain.dto.UserUpdateDto;
 import com.example.juristicsupport.domain.entity.User;
 import com.example.juristicsupport.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,7 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -17,46 +23,46 @@ import java.util.UUID;
  * @since 18.12.2021
  */
 
-@Controller
+@RestController
+//path = http://localhost:8080/api/v1.0/users
+@RequestMapping(path = "users")
 @RequiredArgsConstructor
 public class UserController {
 
-    private final ObjectMapper objectMapper;
+    private final UserMapper userMapper;
     private final UserService userService;
 
-    private UserService setterUserService; //
-    /*
-    @Autowired
-    public UserController(ObjectMapper objectMapper, UserService userService) {
-        this.objectMapper = objectMapper;
-        this.userService = userService;
-    }*/
-
-    @SneakyThrows
-    public String get(String id) {
-        return objectMapper.writeValueAsString(userService.get(UUID.fromString(id)));
+    //path = http://localhost:8080/api/v1.0/users
+    @GetMapping("/{userId}")
+    public UserDto get(@PathVariable(name = "userId") UUID id) {
+        return Optional.of(id)
+                .map(userService::get)
+                .map(userMapper::toDto)
+                .orElseThrow(() -> new RuntimeException("User not found: " + id));
     }
 
-    @SneakyThrows
-    public String create(String userJson) {
-        User user = objectMapper.readValue(userJson, User.class);
-        User created = userService.create(user);
-        return objectMapper.writeValueAsString(created);
+    @PostMapping
+    public UserDto create(@RequestBody UserCreateDto createDto) {
+        return Optional.ofNullable(createDto)
+                .map(userMapper::fromCreateDto)
+                .map(userService::create)
+                .map(userMapper::toDto)
+                .orElseThrow();
     }
 
-    @SneakyThrows
-    public String update(String id, String userJson) {
-        User user = objectMapper.readValue(userJson, User.class);
-        User created = userService.update(UUID.fromString(id), user);
-        return objectMapper.writeValueAsString(created);
+    @PatchMapping("/{userId}")
+    public UserDto update(@PathVariable(name = "userId") UUID id, @RequestBody UserUpdateDto updateDto) {
+        return Optional.ofNullable(updateDto)
+                .map(userMapper::fromUpdateDto)
+                .map(toUpdate -> userService.update(id, toUpdate))
+                .map(userMapper::toDto)
+                .orElseThrow();
     }
 
-    public void delete(String id) {
-        userService.delete(UUID.fromString(id));
+    @DeleteMapping("/{userId}")
+    public void delete(@PathVariable(name = "userId") UUID id) {
+        userService.delete(id);
     }
 
-    @Autowired
-    public void setSetterUserService(UserService setterUserService) {
-        this.setterUserService = setterUserService;
-    }
+
 }
