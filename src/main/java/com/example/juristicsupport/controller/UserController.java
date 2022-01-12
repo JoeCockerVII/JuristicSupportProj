@@ -1,16 +1,12 @@
 package com.example.juristicsupport.controller;
 
-import com.example.juristicsupport.domain.UserMapper;
+import com.example.juristicsupport.domain.mapper.UserMapper;
 import com.example.juristicsupport.domain.dto.UserCreateDto;
 import com.example.juristicsupport.domain.dto.UserDto;
 import com.example.juristicsupport.domain.dto.UserUpdateDto;
-import com.example.juristicsupport.domain.entity.User;
+import com.example.juristicsupport.domain.exception.UserNotFoundException;
 import com.example.juristicsupport.service.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -38,7 +34,7 @@ public class UserController {
         return Optional.of(id)
                 .map(userService::get)
                 .map(userMapper::toDto)
-                .orElseThrow(() -> new RuntimeException("User not found: " + id));
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 
     @PostMapping
@@ -56,7 +52,7 @@ public class UserController {
                 .map(userMapper::fromUpdateDto)
                 .map(toUpdate -> userService.update(id, toUpdate))
                 .map(userMapper::toDto)
-                .orElseThrow();
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 
     @DeleteMapping("/{userId}")

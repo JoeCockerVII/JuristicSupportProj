@@ -2,6 +2,7 @@ package com.example.juristicsupport.service.impl;
 
 import com.example.juristicsupport.domain.entity.User;
 import com.example.juristicsupport.domain.event.UserCreateEvent;
+import com.example.juristicsupport.domain.mapper.UserMapper;
 import com.example.juristicsupport.repository.UserRepository;
 import com.example.juristicsupport.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -26,6 +28,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private final UserMapper userMapper;
 
     @Override
     public User get(UUID id) {
@@ -41,7 +44,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(UUID id, User user) {
-        return userRepository.update(user.withId(id));
+        return Optional.of(id)
+                .map(this::get)
+                .map(current -> userMapper.merge(current, user))
+                .map(userRepository::create)
+                .orElseThrow();
     }
 
     @Override

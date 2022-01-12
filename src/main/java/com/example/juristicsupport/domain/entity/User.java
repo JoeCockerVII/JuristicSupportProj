@@ -5,6 +5,8 @@ import lombok.extern.jackson.Jacksonized;
 
 import java.util.UUID;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * Internal data structure (User data)
  *
@@ -12,13 +14,11 @@ import java.util.UUID;
  * @since 18.12.2021
  */
 
-@Value
-@Builder
-@Jacksonized
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
+@Setter
 
 public class User {
-    @With
+
     UUID id;
     String firstName;
     String lastName;
