@@ -1,7 +1,6 @@
 package com.example.juristicsupport.service.impl;
 
 import com.example.juristicsupport.domain.entity.User;
-import com.example.juristicsupport.domain.event.UserCreateEvent;
 import com.example.juristicsupport.domain.mapper.UserMapper;
 import com.example.juristicsupport.repository.UserRepository;
 import com.example.juristicsupport.service.UserService;
@@ -27,7 +26,6 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final ApplicationEventPublisher eventPublisher;
     private final UserMapper userMapper;
 
     @Override
@@ -38,7 +36,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User create(User user) {
         User created = userRepository.create(user);
-        //eventPublisher.publishEvent(UserCreateEvent.builder().email(user.getEmail()).build()); //example
         return created;
     }
 

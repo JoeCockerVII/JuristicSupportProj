@@ -19,5 +19,5 @@ public class UserUpdateDto {
     String firstName;
     String lastName;
     String email;
-    String supportId;
+    //String supportId;
 }

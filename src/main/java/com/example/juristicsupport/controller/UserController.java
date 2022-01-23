@@ -28,7 +28,6 @@ public class UserController {
     private final UserMapper userMapper;
     private final UserService userService;
 
-    //path = http://localhost:8080/api/v1.0/users
     @GetMapping("/{userId}")
     public UserDto get(@PathVariable(name = "userId") UUID id) {
         return Optional.of(id)

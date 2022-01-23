@@ -1,0 +1,34 @@
+{
+  "31e66e0c-3f17-4aa7-b0db-b12672a95afd": {
+    "orderId": "31e66e0c-3f17-4aa7-b0db-b12672a95afd",
+    "userId": "c9b949c9-7f4e-4af8-a1ba-7d9930af5b3f",
+    "supportsId": [
+      1,
+      2,
+      6
+    ],
+    "supports": [
+      {
+        "supportName": "Various documents prepeartion assistance",
+        "supportId": 1,
+        "supportPrice": 800
+      },
+      {
+        "supportName": "Сonsultation in various areas of law",
+        "supportId": 2,
+        "supportPrice": 800
+      },
+      {
+        "supportName": "Juristic support of immovable transactions",
+        "supportId": 6,
+        "supportPrice": 1500
+      }
+    ],
+    "jurist": {
+      "firstName": "Thomas",
+      "lastName": "Jefferson",
+      "workExperience": 7
+    },
+    "orderPrice": 3100
+  }
+}

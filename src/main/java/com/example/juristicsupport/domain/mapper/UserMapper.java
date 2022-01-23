@@ -12,6 +12,8 @@ import org.mapstruct.MappingTarget;
 import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 
 /**
+ * User data fields Mapper
+ *
  * @author ilyin
  * @since 03.01.2022
  */

@@ -4,11 +4,8 @@ import com.example.juristicsupport.domain.entity.User;
 import com.example.juristicsupport.repository.UserRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -52,6 +49,7 @@ public class UserRepositoryImpl implements UserRepository {
     public User create(User user) {
         Map<UUID, User> content = findAll();
         UUID id = randomUUID();
+        user.setId(id);
         content.put(id, user);
         Files.writeString(path, objectMapper.writeValueAsString(content));
         return findAll().get(id);
