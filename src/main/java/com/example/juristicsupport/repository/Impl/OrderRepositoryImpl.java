@@ -10,8 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static java.util.UUID.randomUUID;
 
@@ -40,9 +39,34 @@ public class OrderRepositoryImpl implements OrderRepository {
         this.file = new File(path.toUri());
     }
 
+    public Map<UUID, Order> getAll() {
+        return findAll();
+    }
+
+    public Order getOrder(UUID orderId) {
+        return findAll().get(orderId);
+    }
+
+    public List<Order> getUserOrders(UUID userId) {
+        List<Order> userOrders = new ArrayList<>();
+        Map<UUID, Order> orders = findAll();
+
+        orders.forEach(
+                (key, value) -> {
+                    if (value.getUserId().equals(userId)) {
+                        userOrders.add(value);
+                    }
+                }
+        );
+        return userOrders;
+    }
+
+
+    /*
     public Order get(UUID id) {
         return findAll().get(id);
-    }
+    }*/
+
 
     @SneakyThrows
     public Order create(Order order) {

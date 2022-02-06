@@ -9,9 +9,12 @@ import com.example.juristicsupport.service.SupportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Service to work with Order
@@ -52,4 +55,28 @@ public class OrderServiceImpl implements OrderService {
 
         return orderRepository.create(order);
     }
+
+
+    /**
+     * Get All Orders
+     */
+    public Map<UUID, Order> getAll() {
+        return orderRepository.getAll();
+    }
+
+    /**
+     * Get Order by ID
+     */
+    public Order getOrder(UUID orderId) {
+        return orderRepository.getOrder(orderId);
+    }
+
+    /**
+     * Get User Orders by his ID
+     */
+    public List<Order> getUserOrders(UUID userId) {
+        return orderRepository.getUserOrders(userId);
+    }
+
+
 }
