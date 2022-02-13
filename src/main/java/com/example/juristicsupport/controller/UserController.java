@@ -4,7 +4,7 @@ import com.example.juristicsupport.domain.mapper.UserMapper;
 import com.example.juristicsupport.domain.dto.UserCreateDto;
 import com.example.juristicsupport.domain.dto.UserDto;
 import com.example.juristicsupport.domain.dto.UserUpdateDto;
-import com.example.juristicsupport.domain.exception.UserNotFoundException;
+import com.example.juristicsupport.domain.exception.EntityNotFoundException;
 import com.example.juristicsupport.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +33,7 @@ public class UserController {
         return Optional.of(id)
                 .map(userService::get)
                 .map(userMapper::toDto)
-                .orElseThrow(() -> new UserNotFoundException(id));
+                .orElseThrow(() -> new EntityNotFoundException(id, "User"));
     }
 
     @PostMapping
@@ -51,7 +51,7 @@ public class UserController {
                 .map(userMapper::fromUpdateDto)
                 .map(toUpdate -> userService.update(id, toUpdate))
                 .map(userMapper::toDto)
-                .orElseThrow(() -> new UserNotFoundException(id));
+                .orElseThrow(() -> new EntityNotFoundException(id, "User"));
     }
 
     @DeleteMapping("/{userId}")

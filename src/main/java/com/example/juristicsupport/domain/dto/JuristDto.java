@@ -1,30 +1,26 @@
 package com.example.juristicsupport.domain.dto;
 
-import com.example.juristicsupport.domain.entity.Jurist;
-import com.example.juristicsupport.domain.entity.Support;
+/**
+ * @author ilyin
+ * @since 11.02.2022
+ */
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
-import java.util.List;
 import java.util.UUID;
 
 import static lombok.AccessLevel.PRIVATE;
-
-/**
- * @author ilyin
- * @since 18.01.2022
- */
 
 @Value
 @Builder
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
-public class OrderDto {
+public class JuristDto {
     UUID id;
-    UUID userId;
-    List<Support> supports;
-    Jurist jurist;
-    Integer orderPrice;
+    String firstName;
+    String lastName;
+    Integer workExperience;
 }

@@ -2,11 +2,14 @@ package com.example.juristicsupport.repository.Impl;
 
 import com.example.juristicsupport.domain.entity.Jurist;
 import com.example.juristicsupport.repository.JuristReporsitory;
-import lombok.SneakyThrows;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Repository of Jurists
@@ -16,29 +19,59 @@ import java.util.Map;
  * @author ilyin
  * @since 22.01.2022
  */
-
 @Repository
+@RequiredArgsConstructor
+//@Transactional(readOnly = true)
 public class JuristRepositoryImpl implements JuristReporsitory {
 
-    private static int supportsCount;
-    private Map<Jurist, Integer> support;
+    private final EntityManager entityManager;
 
-    {
-        support = new HashMap<>();
-        support.put(new Jurist("Alex", "Jones", 5), 1);
-        support.put(new Jurist("Bruce", "Willis", 15), 0);
-        support.put(new Jurist("Thomas", "Jefferson", 7), 0);
+    @Override
+    public Jurist get(UUID id) {
+        return entityManager.find(Jurist.class, id);
     }
 
-    @SneakyThrows
-    public Jurist get() {
-        for (Map.Entry<Jurist, Integer> jurist : support.entrySet()) {
-            if (jurist.getValue() == 0) {
-                jurist.setValue(1);
-                return jurist.getKey();
+    @Override
+    @Transactional
+    public Jurist create(Jurist jurist) {
+        entityManager.persist(jurist);
+        return jurist;
+    }
+
+    @Override
+    @Transactional
+    public Jurist update(Jurist jurist) {
+        return entityManager.merge(jurist);
+    }
+
+    @Override
+    @Transactional
+    public void delete(UUID id) {
+        Jurist jurist = get(id);
+        entityManager.remove(jurist);
+    }
+
+    public Set<Jurist> getAll() {
+        TypedQuery<Jurist> query = entityManager.createQuery("Select j from Jurist j", Jurist.class);
+        return new HashSet<>(query.getResultList());
+    }
+
+    /*
+    // get SQL query (Later)
+    // 1 get and 1 merge with status change
+    @Transactional
+    public Jurist getFreeJurist() {
+        List<Jurist> juristList = entityManager.createQuery("Select j from Jurist j", Jurist.class).getResultList();
+
+        for (Jurist jurist : juristList) {
+            if (jurist.getBusyStatus() == 0) {
+                jurist.setBusyStatus(1);
+                entityManager.persist(jurist);
+                return jurist;
             }
         }
         return null;
     }
+    */
 }
 

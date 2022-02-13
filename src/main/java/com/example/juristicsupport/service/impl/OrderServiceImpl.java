@@ -2,6 +2,7 @@ package com.example.juristicsupport.service.impl;
 
 import com.example.juristicsupport.domain.entity.Order;
 import com.example.juristicsupport.domain.entity.Support;
+import com.example.juristicsupport.domain.mapper.OrderMapper;
 import com.example.juristicsupport.repository.OrderRepository;
 import com.example.juristicsupport.service.JuristService;
 import com.example.juristicsupport.service.OrderService;
@@ -9,12 +10,8 @@ import com.example.juristicsupport.service.SupportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Service to work with Order
@@ -30,9 +27,17 @@ import java.util.UUID;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
+    private final OrderMapper orderMapper;
 
     private final SupportService supportService;
     private final JuristService juristService;
+
+    /**
+     * Get Order by ID
+     */
+    public Order get(UUID orderId) {
+        return orderRepository.get(orderId);
+    }
 
     /**
      * Add jurist, supports and price to Order Entity
@@ -42,7 +47,7 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public Order create(Order order) {
-        List<Support> supports = new ArrayList<>();
+        Set<Support> supports = new HashSet<>();
         Integer orderTotalPrice = 0;
 
         for (Integer id : order.getSupportsId()) {
@@ -51,30 +56,41 @@ public class OrderServiceImpl implements OrderService {
         }
         order.setSupports(supports);
         order.setOrderPrice(orderTotalPrice);
-        order.setJurist(juristService.get());
+
+        // First free Jurist
+        order.setJurist(juristService.getFreeJurist());
 
         return orderRepository.create(order);
     }
 
 
-    /**
-     * Get All Orders
-     */
-    public Map<UUID, Order> getAll() {
-        return orderRepository.getAll();
+    @Override
+    public Order update(UUID id, Order order) {
+        return Optional.of(id)
+                .map(this::get)
+                .map(current -> orderMapper.merge(current, order))
+                .map(orderRepository::update)
+                .orElseThrow();
+    }
+
+    @Override
+    public void delete(UUID orderId) {
+        orderRepository.delete(orderId);
     }
 
     /**
-     * Get Order by ID
+     * Get All Orders
+     *
+     * @return
      */
-    public Order getOrder(UUID orderId) {
-        return orderRepository.getOrder(orderId);
+    public Set<Order> getAll() {
+        return orderRepository.getAll();
     }
 
     /**
      * Get User Orders by his ID
      */
-    public List<Order> getUserOrders(UUID userId) {
+    public Set<Order> getUserOrders(UUID userId) {
         return orderRepository.getUserOrders(userId);
     }
 

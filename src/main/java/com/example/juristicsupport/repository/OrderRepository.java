@@ -1,21 +1,28 @@
 package com.example.juristicsupport.repository;
 
 import com.example.juristicsupport.domain.entity.Order;
+import com.example.juristicsupport.domain.entity.User;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public interface OrderRepository {
 
-//    Order get(UUID id);
+    // getOrder
+    Order get(UUID id);
 
-    Map<UUID, Order> getAll();
+    Order create(Order order);
 
-    Order getOrder(UUID orderId);
+    Order update(Order order);
 
-    List<Order> getUserOrders(UUID userId);
+    void delete(UUID orderId);
 
-    Order create(Order user);
+
+    //REPORT PART
+    Set<Order> getAll();
+
+    Set<Order> getUserOrders(UUID userId);
+
 
 }

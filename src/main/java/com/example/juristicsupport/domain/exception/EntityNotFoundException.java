@@ -11,9 +11,13 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
  * @since 08.01.2022
  */
 @ResponseStatus(value = NOT_FOUND)
-public class UserNotFoundException extends RuntimeException {
-    public UserNotFoundException(UUID id) {
-        super("User not found: id=" + id);
+public class EntityNotFoundException extends RuntimeException {
+    public EntityNotFoundException(UUID id, String message) {
+        super(message + "not found: id=" + id);
+    }
+
+    public EntityNotFoundException(Integer id, String message) {
+        super(message + "not found: id=" + id);
     }
 }
 

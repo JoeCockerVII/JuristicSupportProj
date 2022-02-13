@@ -2,12 +2,20 @@ package com.example.juristicsupport.repository;
 
 import com.example.juristicsupport.domain.entity.Support;
 
-import java.util.List;
-import java.util.Map;
+import javax.persistence.Query;
+import java.util.UUID;
 
 public interface SupportRepository {
 
-    Map<Integer, Support> getAll();
-
     Support get(Integer id);
+
+    Support create(Support support);
+
+    Support update(Support support);
+
+    void delete(UUID id);
+
+    // get all supports (later)
+    //Map<Integer, Support> getAll();
+
 }

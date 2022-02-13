@@ -1,16 +1,16 @@
 package com.example.juristicsupport.repository.Impl;
 
+import com.example.juristicsupport.domain.entity.Jurist;
 import com.example.juristicsupport.domain.entity.Order;
 import com.example.juristicsupport.repository.OrderRepository;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.SneakyThrows;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.UUID.randomUUID;
 
@@ -22,67 +22,67 @@ import static java.util.UUID.randomUUID;
  */
 
 @Repository
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+
 public class OrderRepositoryImpl implements OrderRepository {
 
-    private final ObjectMapper objectMapper;
-    private final File file;
-    private final Path path;
+    private final EntityManager entityManager;
 
-    @SneakyThrows
-    public OrderRepositoryImpl(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-        path = Path.of("F:/Dropbox/prog/orion/PetProjects/JuristicSupport/ordersDB.json");
-        if (!Files.exists(path)) {
-            Files.createFile(path);
-            Files.writeString(path, "{}");
-        }
-        this.file = new File(path.toUri());
+    @Override
+    public Order get(UUID id) {
+        return entityManager.find(Order.class, id);
     }
 
-    public Map<UUID, Order> getAll() {
-        return findAll();
+    @Override
+    @Transactional
+    public Order create(Order order) {
+        entityManager.persist(order);
+        return order;
     }
 
-    public Order getOrder(UUID orderId) {
-        return findAll().get(orderId);
+    @Override
+    @Transactional
+    public Order update(Order order) {
+        return entityManager.merge(order);
     }
 
-    public List<Order> getUserOrders(UUID userId) {
-        List<Order> userOrders = new ArrayList<>();
-        Map<UUID, Order> orders = findAll();
+    @Override
+    @Transactional
+    public void delete(UUID id) {
+        Order order = get(id);
+        entityManager.remove(order);
+    }
 
+    //REPORT PART
+
+    @Override
+    @Transactional
+    public Set<Order> getAll() {
+        TypedQuery<Order> query = entityManager.createQuery("Select o from Order o", Order.class);
+        return new HashSet<>(query.getResultList());
+    }
+
+    public Set<Order> getUserOrders(UUID userId) {
+
+        Set<Order> orders = getAll();
+        orders.removeIf(o -> !(o.getUserId().equals(userId)));
+        return orders;
+
+        /*
+        Set<Order> orders = getAll();
         orders.forEach(
-                (key, value) -> {
-                    if (value.getUserId().equals(userId)) {
-                        userOrders.add(value);
+                (order) -> {
+                    if (!order.getUserId().equals(userId)) {
+//                        userOrders.add(value);
+                        orders.remove(order);
                     }
                 }
         );
-        return userOrders;
-    }
-
-
-    /*
-    public Order get(UUID id) {
-        return findAll().get(id);
-    }*/
-
-
-    @SneakyThrows
-    public Order create(Order order) {
-        Map<UUID, Order> content = findAll();
-        UUID id = randomUUID();
-        order.setOrderId(id);
-        content.put(id, order);
-        Files.writeString(path, objectMapper.writeValueAsString(content));
-        return findAll().get(id);
-    }
-
-    @SneakyThrows
-    private Map<UUID, Order> findAll() {
-        return objectMapper.readValue(file, new TypeReference<>() {
-        });
+        return orders;*/
     }
 
 
 }
+
+

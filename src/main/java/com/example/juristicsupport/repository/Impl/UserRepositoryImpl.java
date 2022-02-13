@@ -2,78 +2,42 @@ package com.example.juristicsupport.repository.Impl;
 
 import com.example.juristicsupport.domain.entity.User;
 import com.example.juristicsupport.repository.UserRepository;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.SneakyThrows;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Map;
+import javax.persistence.EntityManager;
 import java.util.UUID;
 
-import static java.util.UUID.randomUUID;
-
-/**
- * Repository to work with User data storage
- *
- * @author ilyin
- * @since 18.12.2021
- */
-
 @Repository
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserRepositoryImpl implements UserRepository {
 
-    private final ObjectMapper objectMapper;
-    private final File file;
-    private final Path path;
+    private final EntityManager entityManager;
 
-    @SneakyThrows
-    public UserRepositoryImpl(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-        path = Path.of("F:/Dropbox/prog/orion/PetProjects/JuristicSupport/database.json");
-        if (!Files.exists(path)) {
-            Files.createFile(path);
-            Files.writeString(path, "{}");
-        }
-        this.file = new File(path.toUri());
-    }
-
+    @Override
     public User get(UUID id) {
-        return findAll().get(id);
+        return entityManager.find(User.class, id);
     }
 
-    @SneakyThrows
+    @Override
+    @Transactional
     public User create(User user) {
-        Map<UUID, User> content = findAll();
-        UUID id = randomUUID();
-        user.setId(id);
-        content.put(id, user);
-        Files.writeString(path, objectMapper.writeValueAsString(content));
-        return findAll().get(id);
+        entityManager.persist(user);
+        return user;
     }
 
-    @SneakyThrows
+    @Override
+    @Transactional
     public User update(User user) {
-        Map<UUID, User> content = findAll();
-        UUID id = user.getId();
-        content.put(id, user);
-        Files.writeString(path, objectMapper.writeValueAsString(content));
-        return findAll().get(id);
+        return entityManager.merge(user);
     }
 
-    @SneakyThrows
+    @Override
+    @Transactional
     public void delete(UUID id) {
-        Map<UUID, User> content = findAll();
-        content.remove(id);
-        Files.writeString(path, objectMapper.writeValueAsString(content));
-    }
-
-    @SneakyThrows
-    private Map<UUID, User> findAll() {
-        return objectMapper.readValue(file, new TypeReference<>() {
-        });
+        User user = get(id);
+        entityManager.remove(user);
     }
 }

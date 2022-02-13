@@ -1,7 +1,9 @@
 package com.example.juristicsupport.domain.entity;
 
 import lombok.*;
+import org.hibernate.annotations.GenerationTime;
 
+import javax.persistence.*;
 import java.util.UUID;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -13,11 +15,15 @@ import static lombok.AccessLevel.PRIVATE;
  * @since 14.01.2022
  */
 
-@AllArgsConstructor
 @Getter
-@Setter(value = PRIVATE)
-public class Support {
-    Integer SupportId;
-    String SupportName;
-    Integer SupportPrice;
+@Setter
+@Entity
+@Table(name = "supports")
+public class Support extends BaseEntity {
+
+    //    @Generated()
+//    @Column(name = "support_id", columnDefinition = "serial", updatable = false)
+    Integer supportId;
+    String supportName;
+    Integer supportPrice;
 }

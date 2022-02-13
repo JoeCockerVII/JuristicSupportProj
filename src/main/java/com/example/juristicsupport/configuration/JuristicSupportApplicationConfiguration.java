@@ -1,13 +1,5 @@
 package com.example.juristicsupport.configuration;
 
-import com.example.juristicsupport.controller.UserController;
-import com.example.juristicsupport.repository.Impl.UserRepositoryImpl;
-import com.example.juristicsupport.repository.UserRepository;
-import com.example.juristicsupport.service.UserService;
-import com.example.juristicsupport.service.impl.UserServiceImpl;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
