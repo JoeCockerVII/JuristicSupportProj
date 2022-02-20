@@ -1,6 +1,5 @@
 package com.example.juristicsupport.domain.mapper;
 
-
 import com.example.juristicsupport.domain.dto.JuristCreateDto;
 import com.example.juristicsupport.domain.dto.JuristDto;
 import com.example.juristicsupport.domain.dto.JuristUpdateDto;
@@ -13,6 +12,12 @@ import org.mapstruct.MappingTarget;
 
 import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 
+/**
+ * jurist data fields Mapper
+ *
+ * @author ilyin
+ * @since 03.01.2022
+ */
 @Mapper
 public interface JuristMapper {
 

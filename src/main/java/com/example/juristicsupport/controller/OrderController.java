@@ -18,7 +18,6 @@ import java.util.*;
  */
 
 @RestController
-//path = http://localhost:8080/api/v1.0/users/{userId}/orders
 @RequestMapping()
 @RequiredArgsConstructor
 public class OrderController {
@@ -27,14 +26,22 @@ public class OrderController {
     private final OrderService orderService;
 
     /**
-     * Get Order by ID (Part of report)
+     * Get order by orderId
+     *
+     * @param orderId
+     * @return JuristDto on JSON format
      */
     @GetMapping("report/orders/{orderId}")
     public Order get(@PathVariable UUID orderId) {
         return orderService.get(orderId);
     }
 
-
+    /**
+     * Add new jurist
+     *
+     * @param createDto JuristCreateDto
+     * @return JuristDto on JSON format
+     */
     @PostMapping("users/{userId}/orders")
     public OrderDto create(@PathVariable UUID userId, @RequestBody OrderCreateDto createDto) {
 
@@ -45,17 +52,20 @@ public class OrderController {
                 .orElseThrow();
     }
 
-
+    /**
+     * Delete jurist
+     *
+     * @param id of jurist
+     */
     @DeleteMapping("users/{userId}/orders/{orderId}")
     public void delete(@PathVariable(name = "orderId") UUID id) {
         orderService.delete(id);
     }
 
-
-    // FROM REPORT CONTROLLER
-
     /**
-     * Get All Orders
+     * Get all of orders on JSON format
+     *
+     * @return Orders Set on JSON format
      */
     @GetMapping("report/orders")
     public Set<Order> getAll() {
@@ -63,12 +73,12 @@ public class OrderController {
     }
 
     /**
-     * Get User Orders by his ID
+     * Get Orders by User Id
+     * @param userId
+     * @return Orders Set on JSON format
      */
     @GetMapping("report/users/{userId}/orders")
     public Set<Order> getUserOrders(@PathVariable UUID userId) {
         return orderService.getUserOrders(userId);
     }
-
-
 }

@@ -1,12 +1,8 @@
 package com.example.juristicsupport.domain.entity;
 
 import lombok.*;
-import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
-import java.util.UUID;
-
-import static lombok.AccessLevel.PRIVATE;
 
 /**
  * Internal data structure(Support entity)
@@ -20,9 +16,6 @@ import static lombok.AccessLevel.PRIVATE;
 @Entity
 @Table(name = "supports")
 public class Support extends BaseEntity {
-
-    //    @Generated()
-//    @Column(name = "support_id", columnDefinition = "serial", updatable = false)
     Integer supportId;
     String supportName;
     Integer supportPrice;

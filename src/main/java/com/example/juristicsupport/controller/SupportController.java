@@ -13,14 +13,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Controller to work with Support Types
+ * Controller to work with Support Entity
  *
  * @author ilyin
  * @since 14.01.2022
  */
 
 @RestController
-//path = http://localhost:8080/api/v1.0/supports
 @RequestMapping(path = "supports")
 @RequiredArgsConstructor
 public class SupportController {
@@ -28,8 +27,12 @@ public class SupportController {
     private final SupportMapper supportMapper;
     private final SupportService supportService;
 
-
-    //Get support by SupportID
+    /**
+     * Get support by id
+     *
+     * @param id support id
+     * @return SupportDto on JSON format
+     */
     @GetMapping("/{supportId}")
     public SupportDto get(@PathVariable(name = "supportId") Integer id) {
         return Optional.of(id)
@@ -38,7 +41,12 @@ public class SupportController {
                 .orElseThrow(() -> new EntityNotFoundException(id, "Support"));
     }
 
-    //Add new Support
+    /**
+     * Add new support
+     *
+     * @param createDto SupportCreateDto
+     * @return SupportDto on JSON format
+     */
     @PostMapping
     public SupportDto create(@RequestBody SupportCreateDto createDto) {
 
@@ -49,7 +57,13 @@ public class SupportController {
                 .orElseThrow();
     }
 
-    //Update support
+    /**
+     * Update support by id
+     *
+     * @param id        of support
+     * @param updateDto SupportUpdateDto
+     * @return SupportDto on JSON format
+     */
     @PatchMapping("/{supportId}")
     public SupportDto update(@PathVariable(name = "supportId") Integer id, @RequestBody SupportUpdateDto updateDto) {
         return Optional.ofNullable(updateDto)
@@ -59,17 +73,13 @@ public class SupportController {
                 .orElseThrow(() -> new EntityNotFoundException(id, "Support"));
     }
 
-    //Delete support
+    /**
+     * Delete support
+     *
+     * @param id of support
+     */
     @DeleteMapping("/{id}")
     public void delete(@PathVariable(name = "id") UUID id) {
         supportService.delete(id);
     }
-
-
-    //Get all Support
-    /*@GetMapping
-    public Map<Integer, Support> get() {
-        return supportService.getAll();
-    }*/
-
 }

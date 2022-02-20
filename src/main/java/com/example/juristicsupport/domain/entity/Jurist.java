@@ -8,8 +8,6 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import static lombok.AccessLevel.PRIVATE;
-
 /**
  * Internal data structure(Jurist entity)
  *
@@ -28,5 +26,4 @@ public class Jurist extends BaseEntity {
     String lastName;
     Integer workExperience;
     //Integer busyStatus = 0;
-
 }

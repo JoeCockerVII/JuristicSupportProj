@@ -22,6 +22,4 @@ public class SupportDto {
     Integer supportId;
     String supportName;
     Integer supportPrice;
-
-    //String supportId;
 }

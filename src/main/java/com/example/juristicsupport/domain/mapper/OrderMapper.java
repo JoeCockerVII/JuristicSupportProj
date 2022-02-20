@@ -3,7 +3,6 @@ package com.example.juristicsupport.domain.mapper;
 import com.example.juristicsupport.domain.dto.OrderCreateDto;
 import com.example.juristicsupport.domain.dto.OrderDto;
 import com.example.juristicsupport.domain.entity.Order;
-import com.example.juristicsupport.domain.entity.User;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

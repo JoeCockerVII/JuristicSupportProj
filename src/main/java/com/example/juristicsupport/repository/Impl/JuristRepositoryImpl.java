@@ -9,19 +9,16 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
- * Repository of Jurists
- * <p>
- * (Temporarily DB realization is Map)
+ * JuristRepository
  *
  * @author ilyin
  * @since 22.01.2022
  */
 @Repository
 @RequiredArgsConstructor
-//@Transactional(readOnly = true)
+@Transactional(readOnly = true)
 public class JuristRepositoryImpl implements JuristReporsitory {
 
     private final EntityManager entityManager;
@@ -55,23 +52,5 @@ public class JuristRepositoryImpl implements JuristReporsitory {
         TypedQuery<Jurist> query = entityManager.createQuery("Select j from Jurist j", Jurist.class);
         return new HashSet<>(query.getResultList());
     }
-
-    /*
-    // get SQL query (Later)
-    // 1 get and 1 merge with status change
-    @Transactional
-    public Jurist getFreeJurist() {
-        List<Jurist> juristList = entityManager.createQuery("Select j from Jurist j", Jurist.class).getResultList();
-
-        for (Jurist jurist : juristList) {
-            if (jurist.getBusyStatus() == 0) {
-                jurist.setBusyStatus(1);
-                entityManager.persist(jurist);
-                return jurist;
-            }
-        }
-        return null;
-    }
-    */
 }
 

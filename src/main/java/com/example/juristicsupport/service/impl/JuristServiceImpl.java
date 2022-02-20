@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Service to work with Jurist
+ * Service to work with JuristRepository
  *
  * @author ilyin
  * @since 22.01.2022
@@ -51,7 +51,6 @@ public class JuristServiceImpl implements JuristService {
         juristReporsitory.delete(id);
     }
 
-
     public Jurist getFreeJurist() {
         Set<Jurist> juristSet = juristReporsitory.getAll();
         // First Jurist from Set (Update later)
@@ -60,5 +59,4 @@ public class JuristServiceImpl implements JuristService {
         }
         return null;
     }
-
 }

@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Controller to work with User
+ * Controller to work with User Entity
  *
  * @author ilyin
  * @since 18.12.2021
@@ -28,6 +28,12 @@ public class UserController {
     private final UserMapper userMapper;
     private final UserService userService;
 
+    /**
+     * Get user by user id
+     *
+     * @param id user id
+     * @return UserDto on JSON format
+     */
     @GetMapping("/{userId}")
     public UserDto get(@PathVariable(name = "userId") UUID id) {
         return Optional.of(id)
@@ -36,6 +42,12 @@ public class UserController {
                 .orElseThrow(() -> new EntityNotFoundException(id, "User"));
     }
 
+    /**
+     * Add new user
+     *
+     * @param createDto UserCreateDto
+     * @return UserDto on JSON format
+     */
     @PostMapping
     public UserDto create(@RequestBody UserCreateDto createDto) {
         return Optional.ofNullable(createDto)
@@ -45,6 +57,13 @@ public class UserController {
                 .orElseThrow();
     }
 
+    /**
+     * Update user by id
+     *
+     * @param id        of user
+     * @param updateDto UserUpdateDto
+     * @return UserDto on JSON format
+     */
     @PatchMapping("/{userId}")
     public UserDto update(@PathVariable(name = "userId") UUID id, @RequestBody UserUpdateDto updateDto) {
         return Optional.ofNullable(updateDto)
@@ -54,10 +73,13 @@ public class UserController {
                 .orElseThrow(() -> new EntityNotFoundException(id, "User"));
     }
 
+    /**
+     * Delete user
+     *
+     * @param id of user
+     */
     @DeleteMapping("/{userId}")
     public void delete(@PathVariable(name = "userId") UUID id) {
         userService.delete(id);
     }
-
-
 }

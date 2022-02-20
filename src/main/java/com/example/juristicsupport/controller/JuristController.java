@@ -13,12 +13,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
+ * Controller to work with Jurist Entity
+ *
  * @author ilyin
  * @since 11.02.2022
  */
 
 @RestController
-//path = http://localhost:8080/api/v1.0/jurists
 @RequestMapping(path = "jurists")
 @RequiredArgsConstructor
 public class JuristController {
@@ -26,7 +27,12 @@ public class JuristController {
     private final JuristMapper juristMapper;
     private final JuristService juristService;
 
-    //Get support by SupportID
+    /**
+     * Get jurist by id
+     *
+     * @param id jurist id
+     * @return JuristDto on JSON format
+     */
     @GetMapping("/{Id}")
     public JuristDto get(@PathVariable(name = "Id") UUID id) {
         return Optional.of(id)
@@ -35,7 +41,12 @@ public class JuristController {
                 .orElseThrow(() -> new EntityNotFoundException(id, "Jurist"));
     }
 
-    //Add new Support
+    /**
+     * Add new jurist
+     *
+     * @param createDto JuristCreateDto
+     * @return JuristDto on JSON format
+     */
     @PostMapping
     public JuristDto create(@RequestBody JuristCreateDto createDto) {
         return Optional.ofNullable(createDto)
@@ -45,7 +56,13 @@ public class JuristController {
                 .orElseThrow();
     }
 
-    //Update support
+    /**
+     * Update jurist by id
+     *
+     * @param id        of jurist
+     * @param updateDto JuristUpdateDto
+     * @return JuristDto on JSON format
+     */
     @PatchMapping("/{juristId}")
     public JuristDto update(@PathVariable(name = "juristId") UUID id, @RequestBody JuristUpdateDto updateDto) {
         return Optional.ofNullable(updateDto)
@@ -55,7 +72,11 @@ public class JuristController {
                 .orElseThrow(() -> new EntityNotFoundException(id, "Jurist"));
     }
 
-    //Delete support
+    /**
+     * Delete jurist
+     *
+     * @param id of jurist
+     */
     @DeleteMapping("/{id}")
     public void delete(@PathVariable(name = "id") UUID id) {
         juristService.delete(id);

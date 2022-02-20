@@ -9,6 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.UUID;
 
+/**
+ * UserRepository
+ *
+ * @author ilyin
+ * @since 18.12.2021
+ */
+
 @Repository
 @RequiredArgsConstructor
 @Transactional(readOnly = true)

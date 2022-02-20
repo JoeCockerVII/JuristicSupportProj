@@ -13,8 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Model level(business logic)
- * * Service to interact with UserRepository
+ * Service to work with UserRepository
  *
  * @author ilyin
  * @since 18.12.2021

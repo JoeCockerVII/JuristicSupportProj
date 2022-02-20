@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 /**
- * Service to work with Order
+ * Service to work with OrderRepository
  *
  * @author ilyin
  * @since 20.01.2022
@@ -32,19 +32,10 @@ public class OrderServiceImpl implements OrderService {
     private final SupportService supportService;
     private final JuristService juristService;
 
-    /**
-     * Get Order by ID
-     */
     public Order get(UUID orderId) {
         return orderRepository.get(orderId);
     }
 
-    /**
-     * Add jurist, supports and price to Order Entity
-     *
-     * @param order
-     * @return Entity of Order
-     */
     @Override
     public Order create(Order order) {
         Set<Support> supports = new HashSet<>();
@@ -63,7 +54,6 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.create(order);
     }
 
-
     @Override
     public Order update(UUID id, Order order) {
         return Optional.of(id)
@@ -78,21 +68,11 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.delete(orderId);
     }
 
-    /**
-     * Get All Orders
-     *
-     * @return
-     */
     public Set<Order> getAll() {
         return orderRepository.getAll();
     }
 
-    /**
-     * Get User Orders by his ID
-     */
     public Set<Order> getUserOrders(UUID userId) {
         return orderRepository.getUserOrders(userId);
     }
-
-
 }

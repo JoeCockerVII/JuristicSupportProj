@@ -1,6 +1,5 @@
 package com.example.juristicsupport.repository.Impl;
 
-import com.example.juristicsupport.domain.entity.Jurist;
 import com.example.juristicsupport.domain.entity.Order;
 import com.example.juristicsupport.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,12 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.*;
-import java.util.stream.Collectors;
-
-import static java.util.UUID.randomUUID;
 
 /**
- * Repository to work with User Orders
+ * OrderRepository
  *
  * @author ilyin
  * @since 20.01.2022
@@ -24,7 +20,6 @@ import static java.util.UUID.randomUUID;
 @Repository
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-
 public class OrderRepositoryImpl implements OrderRepository {
 
     private final EntityManager entityManager;
