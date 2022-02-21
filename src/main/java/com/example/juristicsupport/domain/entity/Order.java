@@ -4,12 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.util.Set;
 import java.util.UUID;
+
+import static javax.persistence.FetchType.LAZY;
 
 /**
  * Internal data structure(User Order entity)
@@ -28,6 +27,10 @@ public class Order extends BaseEntity {
     @Column(columnDefinition = "varchar(36)")
     @Type(type = "uuid-char")
     UUID userId;
+/*
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;*/
 
     @Transient
     Set<Integer> supportsId;

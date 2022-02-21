@@ -5,11 +5,12 @@ import com.example.juristicsupport.domain.mapper.JuristMapper;
 import com.example.juristicsupport.repository.JuristReporsitory;
 import com.example.juristicsupport.service.JuristService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -22,6 +23,7 @@ import java.util.UUID;
 @Service
 @Primary
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class JuristServiceImpl implements JuristService {
 
     private final JuristReporsitory juristReporsitory;
@@ -29,34 +31,39 @@ public class JuristServiceImpl implements JuristService {
 
     @Override
     public Jurist get(UUID id) {
-        return juristReporsitory.get(id);
+        Jurist result = juristReporsitory.getById(id);
+        Hibernate.initialize(result);
+        return result;
     }
 
     @Override
+    @Transactional
     public Jurist create(Jurist jurist) {
-        return juristReporsitory.create(jurist);
+        return juristReporsitory.save(jurist);
     }
 
     @Override
+    @Transactional
     public Jurist update(UUID id, Jurist jurist) {
         return Optional.of(id)
                 .map(this::get)
                 .map(current -> juristMapper.merge(current, jurist))
-                .map(juristReporsitory::update)
+                .map(juristReporsitory::save)
                 .orElseThrow();
     }
 
     @Override
+    @Transactional
     public void delete(UUID id) {
-        juristReporsitory.delete(id);
+        juristReporsitory.deleteById(id);
     }
 
+    @Override
+    @Transactional
     public Jurist getFreeJurist() {
-        Set<Jurist> juristSet = juristReporsitory.getAll();
-        // First Jurist from Set (Update later)
-        for (Jurist jurist : juristSet) {
-            return jurist;
-        }
-        return null;
+        Jurist jurist = juristReporsitory.getFirstByBusyStatusEquals(0);
+        jurist.setBusyStatus(1);
+        juristReporsitory.save(jurist);
+        return jurist;
     }
 }

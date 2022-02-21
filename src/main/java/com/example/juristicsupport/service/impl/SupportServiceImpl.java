@@ -7,6 +7,8 @@ import com.example.juristicsupport.service.SupportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,30 +22,33 @@ import java.util.UUID;
 @Service
 @Primary
 @RequiredArgsConstructor
-
+@Transactional(readOnly = true)
 public class SupportServiceImpl implements SupportService {
 
     private final SupportRepository supportRepository;
     private final SupportMapper supportMapper;
 
     public Support get(Integer id) {
-        return supportRepository.get(id);
+        return supportRepository.getBySupportId(id);
     }
 
+    @Transactional
     public Support create(Support support) {
-        return supportRepository.create(support);
+        return supportRepository.save(support);
     }
 
+    @Transactional
     public Support update(Integer supportId, Support support) {
         return Optional.of(supportId)
                 .map(this::get)
                 .map(current -> supportMapper.merge(current, support))
-                .map(supportRepository::update)
+                .map(supportRepository::save)
                 .orElseThrow();
     }
 
     @Override
+    @Transactional
     public void delete(UUID id) {
-        supportRepository.delete(id);
+        supportRepository.deleteById(id);
     }
 }

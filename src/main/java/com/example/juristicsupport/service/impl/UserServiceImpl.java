@@ -5,6 +5,7 @@ import com.example.juristicsupport.domain.mapper.UserMapper;
 import com.example.juristicsupport.repository.UserRepository;
 import com.example.juristicsupport.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,8 +22,8 @@ import java.util.UUID;
 
 @Service
 @Primary
-@Transactional
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -30,25 +31,30 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User get(UUID id) {
-        return userRepository.get(id);
+        User result = userRepository.getById(id);
+        Hibernate.initialize(result);
+        return result;
     }
 
     @Override
+    @Transactional
     public User create(User user) {
-        return userRepository.create(user);
+        return userRepository.save(user);
     }
 
     @Override
+    @Transactional
     public User update(UUID id, User user) {
         return Optional.of(id)
                 .map(this::get)
                 .map(current -> userMapper.merge(current, user))
-                .map(userRepository::update)
+                .map(userRepository::save)
                 .orElseThrow();
     }
 
     @Override
+    @Transactional
     public void delete(UUID id) {
-        userRepository.delete(id);
+        userRepository.deleteById(id);
     }
 }

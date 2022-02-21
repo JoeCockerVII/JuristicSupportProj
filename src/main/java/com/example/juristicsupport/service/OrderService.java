@@ -1,7 +1,9 @@
 package com.example.juristicsupport.service;
 
 import com.example.juristicsupport.domain.entity.Order;
+import org.springframework.data.domain.Page;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -49,7 +51,7 @@ public interface OrderService {
      *
      * @return Orders Set(Page)
      */
-    Set<Order> getAll();
+    List<Order> getAll();
 
     /**
      * Get all User orders (for Report)
@@ -57,5 +59,5 @@ public interface OrderService {
      * @param userId
      * @return Orders Set(Page)
      */
-    Set<Order> getUserOrders(UUID userId);
+    List<Order> getUserOrders(UUID userId);
 }

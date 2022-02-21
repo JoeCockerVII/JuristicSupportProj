@@ -22,9 +22,11 @@ import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 public interface JuristMapper {
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "busyStatus", ignore = true)
     Jurist fromCreateDto(JuristCreateDto source);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "busyStatus", ignore = true)
     Jurist fromUpdateDto(JuristUpdateDto source);
 
     JuristDto toDto(Jurist source);

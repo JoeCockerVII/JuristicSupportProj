@@ -1,6 +1,10 @@
 package com.example.juristicsupport.repository;
 
 import com.example.juristicsupport.domain.entity.Order;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -11,50 +15,21 @@ import java.util.UUID;
  * @since 20.01.2022
  */
 
-public interface OrderRepository {
-    /**
-     * Get order by if (for Report)
-     *
-     * @param id of order
-     * @return Order Entity
-     */
-    Order get(UUID id);
+public interface OrderRepository extends JpaRepository<Order, UUID> {
 
     /**
-     * Add new order
-     *
-     * @param order Order
-     * @return Order Entity
-     */
-    Order create(Order order);
-
-    /**
-     * Update order by id
-     *
-     * @param order Order
-     * @return Order Entity
-     */
-    Order update(Order order);
-
-    /**
-     * Delete order by id
-     *
-     * @param orderId of order
-     */
-    void delete(UUID orderId);
-
-    /**
-     * Get all orders (for Report)
+     * Get all orders (for Report)!!!Modify!!!
      *
      * @return Orders Set(Page)
      */
-    Set<Order> getAll();
+    List<Order> findAll();
 
     /**
-     * Get all User orders (for Report)
+     * Get all User orders (for Report) !!!Modify!!!
      *
      * @param userId
      * @return Orders Set(Page)
      */
-    Set<Order> getUserOrders(UUID userId);
+    List<Order> findOrderByUserId(UUID userId);
+
 }

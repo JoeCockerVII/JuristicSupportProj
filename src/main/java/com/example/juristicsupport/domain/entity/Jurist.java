@@ -25,5 +25,5 @@ public class Jurist extends BaseEntity {
     String firstName;
     String lastName;
     Integer workExperience;
-    //Integer busyStatus = 0;
+    Integer busyStatus = 0;
 }

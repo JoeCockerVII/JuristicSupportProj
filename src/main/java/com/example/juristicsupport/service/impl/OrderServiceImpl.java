@@ -8,8 +8,10 @@ import com.example.juristicsupport.service.JuristService;
 import com.example.juristicsupport.service.OrderService;
 import com.example.juristicsupport.service.SupportService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -23,7 +25,7 @@ import java.util.*;
 @Service
 @Primary
 @RequiredArgsConstructor
-
+@Transactional(readOnly = true)
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
@@ -32,11 +34,13 @@ public class OrderServiceImpl implements OrderService {
     private final SupportService supportService;
     private final JuristService juristService;
 
-    public Order get(UUID orderId) {
-        return orderRepository.get(orderId);
+    public Order get(UUID id) {
+        Order result = orderRepository.getById(id);
+        Hibernate.initialize(result);
+        return result;
     }
 
-    @Override
+    @Transactional
     public Order create(Order order) {
         Set<Support> supports = new HashSet<>();
         Integer orderTotalPrice = 0;
@@ -51,28 +55,28 @@ public class OrderServiceImpl implements OrderService {
         // First free Jurist
         order.setJurist(juristService.getFreeJurist());
 
-        return orderRepository.create(order);
+        return orderRepository.save(order);
     }
 
-    @Override
+    @Transactional
     public Order update(UUID id, Order order) {
         return Optional.of(id)
                 .map(this::get)
                 .map(current -> orderMapper.merge(current, order))
-                .map(orderRepository::update)
+                .map(orderRepository::save)
                 .orElseThrow();
     }
 
-    @Override
+    @Transactional
     public void delete(UUID orderId) {
-        orderRepository.delete(orderId);
+        orderRepository.deleteById(orderId);
     }
 
-    public Set<Order> getAll() {
-        return orderRepository.getAll();
+    public List<Order> getAll() {
+        return orderRepository.findAll();
     }
 
-    public Set<Order> getUserOrders(UUID userId) {
-        return orderRepository.getUserOrders(userId);
+    public List<Order> getUserOrders(UUID userId) {
+        return orderRepository.findOrderByUserId(userId);
     }
 }
