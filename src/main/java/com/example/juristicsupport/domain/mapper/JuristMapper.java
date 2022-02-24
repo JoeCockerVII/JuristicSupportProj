@@ -23,10 +23,12 @@ public interface JuristMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "busyStatus", ignore = true)
+    @Mapping(target = "orders", ignore = true)
     Jurist fromCreateDto(JuristCreateDto source);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "busyStatus", ignore = true)
+    @Mapping(target = "orders", ignore = true)
     Jurist fromUpdateDto(JuristUpdateDto source);
 
     JuristDto toDto(Jurist source);

@@ -2,6 +2,7 @@ package com.example.juristicsupport.service;
 
 import com.example.juristicsupport.domain.entity.Support;
 
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -43,4 +44,7 @@ public interface SupportService {
      * @param id of support
      */
     void delete(UUID id);
+
+    Set<Support> getSupportSetById(Set<Integer> supportIds);
+
 }

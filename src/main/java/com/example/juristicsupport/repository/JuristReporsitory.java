@@ -2,8 +2,6 @@ package com.example.juristicsupport.repository;
 
 import com.example.juristicsupport.domain.entity.Jurist;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -14,6 +12,12 @@ import java.util.UUID;
  */
 public interface JuristReporsitory extends JpaRepository<Jurist, UUID> {
 
+    /**
+     * Get first free jurist from DB
+     *
+     * @param busyStatus
+     * @return Jurist Entity
+     */
     Jurist getFirstByBusyStatusEquals(Integer busyStatus);
 
 }

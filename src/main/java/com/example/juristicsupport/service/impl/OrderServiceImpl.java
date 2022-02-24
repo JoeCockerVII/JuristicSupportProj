@@ -1,15 +1,19 @@
 package com.example.juristicsupport.service.impl;
 
+import com.example.juristicsupport.domain.entity.Jurist;
 import com.example.juristicsupport.domain.entity.Order;
 import com.example.juristicsupport.domain.entity.Support;
+import com.example.juristicsupport.domain.entity.User;
 import com.example.juristicsupport.domain.mapper.OrderMapper;
 import com.example.juristicsupport.repository.OrderRepository;
 import com.example.juristicsupport.service.JuristService;
 import com.example.juristicsupport.service.OrderService;
 import com.example.juristicsupport.service.SupportService;
+import com.example.juristicsupport.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
-import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,9 +25,7 @@ import java.util.*;
  * @author ilyin
  * @since 20.01.2022
  */
-
 @Service
-@Primary
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class OrderServiceImpl implements OrderService {
@@ -33,27 +35,26 @@ public class OrderServiceImpl implements OrderService {
 
     private final SupportService supportService;
     private final JuristService juristService;
+    private final UserService userService;
 
     public Order get(UUID id) {
         Order result = orderRepository.getById(id);
-        Hibernate.initialize(result);
+        Hibernate.initialize(result); //for LAZY
+        Hibernate.initialize(result.getUser());//for LAZY
         return result;
     }
 
     @Transactional
-    public Order create(Order order) {
-        Set<Support> supports = new HashSet<>();
-        Integer orderTotalPrice = 0;
+    public Order create(UUID userId, Order order) {
+        final User user = userService.get(userId);
+        user.addOrder(order);
 
-        for (Integer id : order.getSupportsId()) {
-            supports.add(supportService.get(id));
-            orderTotalPrice += supportService.get(id).getSupportPrice();
-        }
-        order.setSupports(supports);
-        order.setOrderPrice(orderTotalPrice);
+        final Jurist jurist = juristService.getFreeJurist();
+        jurist.addOrder(order);
 
-        // First free Jurist
-        order.setJurist(juristService.getFreeJurist());
+        Set<Support> supports = supportService.getSupportSetById(order.getSupportsId());
+        order.setOrderPrice(supports.stream().mapToInt(Support::getSupportPrice).sum());
+        order.addSupports(supports);
 
         return orderRepository.save(order);
     }
@@ -68,15 +69,18 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Transactional
-    public void delete(UUID orderId) {
-        orderRepository.deleteById(orderId);
+    public void delete(UUID userId, UUID orderId) {
+        final Order toDelete = orderRepository.findById(orderId).orElseThrow();
+        UUID juristId = toDelete.getJurist().getId();
+        userService.get(userId).removeOrder(toDelete);
+        juristService.get(juristId).removeOrder(toDelete);
     }
 
-    public List<Order> getAll() {
-        return orderRepository.findAll();
+    public Page<Order> getAll(Pageable pageable) {
+        return orderRepository.findAll(pageable);
     }
 
-    public List<Order> getUserOrders(UUID userId) {
-        return orderRepository.findOrderByUserId(userId);
+    public Page<Order> getUserOrders(UUID userId, Pageable pageable) {
+        return orderRepository.findOrderByUserId(userId, pageable);
     }
 }

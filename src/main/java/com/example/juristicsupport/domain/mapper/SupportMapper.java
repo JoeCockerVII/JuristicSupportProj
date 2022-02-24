@@ -21,9 +21,11 @@ import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 public interface SupportMapper {
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "orders", ignore = true)
     Support fromCreateDto(SupportCreateDto source);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "orders", ignore = true)
     Support fromUpdateDto(SupportUpdateDto source);
 
     SupportDto toDto(Support source);

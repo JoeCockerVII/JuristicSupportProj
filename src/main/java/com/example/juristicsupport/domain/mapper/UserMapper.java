@@ -20,11 +20,11 @@ import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 @Mapper
 public interface UserMapper {
     @Mapping(target = "id", ignore = true)
-    //@Mapping(target = "orders", ignore = true)
+    @Mapping(target = "orders", ignore = true)
     User fromCreateDto(UserCreateDto source);
 
     @Mapping(target = "id", ignore = true)
-        //@Mapping(target = "orders", ignore = true)
+    @Mapping(target = "orders", ignore = true)
     User fromUpdateDto(UserUpdateDto source);
 
     UserDto toDto(User source);

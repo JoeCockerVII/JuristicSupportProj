@@ -8,8 +8,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-import java.util.UUID;
-
 import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 
 /**
@@ -18,16 +16,15 @@ import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
  * @author ilyin
  * @since 20.01.2022
  */
-
 @Mapper
 public interface OrderMapper {
 
-    @Mapping(target = "userId", source = "userId")
+    @Mapping(target = "user", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "jurist", ignore = true)
     @Mapping(target = "orderPrice", ignore = true)
     @Mapping(target = "supports", ignore = true)
-    Order fromCreateDto(UUID userId, OrderCreateDto source);
+    Order fromCreateDto(OrderCreateDto source);
 
     OrderDto toDto(Order source);
 

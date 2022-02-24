@@ -2,6 +2,7 @@ package com.example.juristicsupport.service;
 
 import com.example.juristicsupport.domain.entity.Order;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Set;
@@ -15,7 +16,7 @@ import java.util.UUID;
  */
 public interface OrderService {
     /**
-     * Get order by if (for Report)
+     * Get order by id (for Report)
      *
      * @param orderId order id
      * @return Order Entity
@@ -28,7 +29,7 @@ public interface OrderService {
      * @param order Order
      * @return Order Entity
      */
-    Order create(Order order);
+    Order create(UUID userId, Order order);
 
     /**
      * Update order by id
@@ -44,14 +45,14 @@ public interface OrderService {
      *
      * @param orderId of order
      */
-    void delete(UUID orderId);
+    void delete(UUID userId, UUID orderId);
 
     /**
      * Get all orders (for Report)
      *
      * @return Orders Set(Page)
      */
-    List<Order> getAll();
+    Page<Order> getAll(Pageable pageable);
 
     /**
      * Get all User orders (for Report)
@@ -59,5 +60,5 @@ public interface OrderService {
      * @param userId
      * @return Orders Set(Page)
      */
-    List<Order> getUserOrders(UUID userId);
+    Page<Order> getUserOrders(UUID userId, Pageable pageable);
 }

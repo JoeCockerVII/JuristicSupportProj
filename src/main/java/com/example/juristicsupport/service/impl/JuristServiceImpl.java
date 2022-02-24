@@ -32,7 +32,8 @@ public class JuristServiceImpl implements JuristService {
     @Override
     public Jurist get(UUID id) {
         Jurist result = juristReporsitory.getById(id);
-        Hibernate.initialize(result);
+        Hibernate.initialize(result); //for LAZY
+        Hibernate.initialize(result.getOrders());//for LAZY
         return result;
     }
 

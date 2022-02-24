@@ -24,15 +24,24 @@ import static lombok.AccessLevel.PRIVATE;
 @Entity
 @Table(name = "users")
 public class User extends BaseEntity {
-    String firstName;
-    String lastName;
-    String email;
+    private String firstName;
+    private String lastName;
+    private String email;
 
-    /*
     @Setter(PRIVATE)
     @OneToMany(mappedBy = "user",
             orphanRemoval = true,
-            cascade = {PERSIST, MERGE, DETACH, REFRESH})
+            cascade = {PERSIST, MERGE, DETACH, REFRESH}
+    )
     private List<Order> orders = new ArrayList<>();
-    */
+
+    public void addOrder(Order order) {
+        orders.add(order);
+        order.setUser(this);
+    }
+
+    public void removeOrder(Order order) {
+        this.orders.remove(order);
+    }
+
 }

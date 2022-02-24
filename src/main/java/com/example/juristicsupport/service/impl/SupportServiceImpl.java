@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -28,15 +29,18 @@ public class SupportServiceImpl implements SupportService {
     private final SupportRepository supportRepository;
     private final SupportMapper supportMapper;
 
+    @Override
     public Support get(Integer id) {
         return supportRepository.getBySupportId(id);
     }
 
+    @Override
     @Transactional
     public Support create(Support support) {
         return supportRepository.save(support);
     }
 
+    @Override
     @Transactional
     public Support update(Integer supportId, Support support) {
         return Optional.of(supportId)
@@ -51,4 +55,11 @@ public class SupportServiceImpl implements SupportService {
     public void delete(UUID id) {
         supportRepository.deleteById(id);
     }
+
+    @Override
+    @Transactional
+    public Set<Support> getSupportSetById(Set<Integer> supportIds) {
+        return supportRepository.findBySupportIdIn(supportIds);
+    }
+
 }

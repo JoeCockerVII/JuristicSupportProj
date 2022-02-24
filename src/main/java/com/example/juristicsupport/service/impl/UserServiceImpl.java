@@ -19,11 +19,10 @@ import java.util.UUID;
  * @author ilyin
  * @since 18.12.2021
  */
-
 @Service
 @Primary
+@Transactional
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -32,7 +31,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User get(UUID id) {
         User result = userRepository.getById(id);
-        Hibernate.initialize(result);
+        Hibernate.initialize(result); //for LAZY
+        Hibernate.initialize(result.getOrders());//for LAZY
         return result;
     }
 

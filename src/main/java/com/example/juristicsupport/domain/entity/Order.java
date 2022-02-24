@@ -2,13 +2,12 @@ package com.example.juristicsupport.domain.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.Set;
-import java.util.UUID;
 
-import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.FetchType.EAGER;
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * Internal data structure(User Order entity)
@@ -21,23 +20,31 @@ import static javax.persistence.FetchType.LAZY;
 @Setter
 @Entity
 @Table(name = "orders")
-
 public class Order extends BaseEntity {
 
-    @Column(columnDefinition = "varchar(36)")
-    @Type(type = "uuid-char")
-    UUID userId;
-/*
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "user_id")
-    private User user;*/
+    private User user;
+
+    @ManyToOne(fetch = EAGER)
+    @JoinColumn(name = "jurist_id")
+    Jurist jurist;
+
+    @Setter(PRIVATE)
+    @ManyToMany(fetch = EAGER)
+    @JoinTable(
+            name = "order_support_mtm",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "support_id")
+    )
+    private Set<Support> supports;
 
     @Transient
     Set<Integer> supportsId;
-    @Transient
-    Set<Support> supports;
-    @Transient
-    Jurist jurist;
 
     Integer orderPrice;
+
+    public void addSupports(Set<Support> supports) {
+        this.supports = supports;
+    }
 }

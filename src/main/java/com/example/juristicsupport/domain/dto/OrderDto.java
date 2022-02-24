@@ -1,7 +1,6 @@
 package com.example.juristicsupport.domain.dto;
 
-import com.example.juristicsupport.domain.entity.Jurist;
-import com.example.juristicsupport.domain.entity.Support;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
@@ -21,10 +20,13 @@ import static lombok.AccessLevel.PRIVATE;
 @Builder
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer"})
 public class OrderDto {
     UUID id;
-    UUID userId;
-    List<Support> supports;
-    Jurist jurist;
+
+    UserDto user;
+    JuristDto jurist;
+
+    List<SupportDto> supports;
     Integer orderPrice;
 }
