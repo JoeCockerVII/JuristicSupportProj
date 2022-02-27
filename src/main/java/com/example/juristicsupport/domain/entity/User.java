@@ -3,13 +3,16 @@ package com.example.juristicsupport.domain.entity;
 import lombok.*;
 
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.juristicsupport.domain.entity.Role.ADMIN;
 import static javax.persistence.CascadeType.*;
+import static javax.persistence.EnumType.STRING;
 import static lombok.AccessLevel.PRIVATE;
 
 /**
@@ -27,6 +30,11 @@ public class User extends BaseEntity {
     private String firstName;
     private String lastName;
     private String email;
+
+    @Enumerated(STRING)
+    private Role role;
+
+    private String password;
 
     @Setter(PRIVATE)
     @OneToMany(mappedBy = "user",
