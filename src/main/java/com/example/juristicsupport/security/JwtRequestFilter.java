@@ -42,8 +42,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String token = request.getHeader("AUTHORIZATION");
 
         SecurityContext securityContext = SecurityContextHolder.getContext();
-//        if (securityContext.getAuthentication() == null) {
-        if (token != null && securityContext.getAuthentication() == null) {
+//        if (token != null && securityContext.getAuthentication() == null) {
+        if (token != null) {
             String username = tokenService.extractUsernameAndValidate(token);
             UserDto user = userRepository.findByEmail(username)
                     .map(userMapper::toDto)
@@ -57,5 +57,4 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
     }
-
 }

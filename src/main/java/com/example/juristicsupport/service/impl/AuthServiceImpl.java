@@ -30,7 +30,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public LoginResponseDto login(LoginRequest loginRequest) {
         User user = userRepository.findByEmail(loginRequest.getEmail())
-                .orElseThrow(); // Exception
+                .orElseThrow(() -> new RuntimeException("User not found"));
         if (passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             return new LoginResponseDto(tokenService.generateToken(user), user.getId());
         } else {
@@ -40,13 +40,18 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String signUp(SignUpRequest signUpRequest) {
+
+        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+            throw new RuntimeException("User already exists");
+        }
+
         User user = new User();
         user.setEmail(signUpRequest.getEmail());
+
         user.setFirstName(signUpRequest.getFirstName());
         user.setLastName(signUpRequest.getLastName());
         user.setRole(signUpRequest.getRole());
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-
         userService.create(user);
         return tokenService.generateToken(user);
     }

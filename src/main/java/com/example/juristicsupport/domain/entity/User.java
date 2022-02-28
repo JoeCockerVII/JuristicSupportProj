@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.juristicsupport.domain.entity.Role.ADMIN;
+import static com.example.juristicsupport.domain.entity.Role.CUSTOMER;
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.EnumType.STRING;
 import static lombok.AccessLevel.PRIVATE;
@@ -32,7 +33,7 @@ public class User extends BaseEntity {
     private String email;
 
     @Enumerated(STRING)
-    private Role role;
+    private Role role = CUSTOMER;
 
     private String password;
 

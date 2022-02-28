@@ -8,6 +8,7 @@ import com.example.juristicsupport.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -33,6 +34,7 @@ public class OrderController {
      * @return JuristDto on JSON format
      */
     @GetMapping("report/orders/{orderId}")
+    @PreAuthorize("hasAnyRole('ADMIN','CUSTOMER') || hasAnyAuthority('ROLE_ADMIN','ROLE_CUSTOMER')")
     public OrderDto get(@PathVariable UUID orderId) {
         return Optional.of(orderId)
                 .map(orderService::get)
@@ -47,6 +49,7 @@ public class OrderController {
      * @return OrderDto on JSON format
      */
     @PostMapping("users/{userId}/orders")
+    @PreAuthorize("hasRole('CUSTOMER') || hasAuthority('ROLE_CUSTOMER')")
     public OrderDto create(@PathVariable UUID userId, @RequestBody OrderCreateDto createDto) {
 
         return Optional.ofNullable(createDto)
@@ -63,6 +66,7 @@ public class OrderController {
      * @param orderId
      */
     @DeleteMapping("users/{userId}/orders/{orderId}")
+    @PreAuthorize("hasAnyRole('ADMIN','CUSTOMER') || hasAnyAuthority('ROLE_ADMIN','ROLE_CUSTOMER')")
     public void delete(@PathVariable UUID userId, @PathVariable UUID orderId) {
         orderService.delete(userId, orderId);
     }
@@ -74,6 +78,7 @@ public class OrderController {
      * @return Orders Set on JSON format
      */
     @GetMapping("report/orders")
+    @PreAuthorize("hasRole('ADMIN') || hasAuthority('ROLE_ADMIN')")
     public Page<OrderDto> getAll(Pageable pageable) {
         return Optional.of(pageable)
                 .map(it -> orderService.getAll(pageable))
@@ -89,6 +94,7 @@ public class OrderController {
      * @return Orders Set on JSON format
      */
     @GetMapping("report/users/{userId}/orders")
+    @PreAuthorize("hasAnyRole('ADMIN','CUSTOMER') || hasAnyAuthority('ROLE_ADMIN','ROLE_CUSTOMER')")
     public Page<OrderDto> getUserOrders(@PathVariable UUID userId, Pageable pageable) {
         return Optional.of(userId)
                 .map(it -> orderService.getUserOrders(userId, pageable))

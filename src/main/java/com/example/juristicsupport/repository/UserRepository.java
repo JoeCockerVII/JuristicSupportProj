@@ -13,5 +13,19 @@ import java.util.UUID;
  * @since 18.12.2021
  */
 public interface UserRepository extends JpaRepository<User, UUID> {
+    /**
+     * Get user by email
+     *
+     * @param email
+     * @return Orders Set(Page)
+     */
     Optional<User> findByEmail(String email);
+
+    /**
+     * User existion check by email
+     *
+     * @param email
+     * @return Orders Set(Page)
+     */
+    boolean existsByEmail(String email);
 }

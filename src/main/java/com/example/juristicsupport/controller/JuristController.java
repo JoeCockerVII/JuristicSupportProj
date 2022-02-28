@@ -7,6 +7,7 @@ import com.example.juristicsupport.domain.exception.EntityNotFoundException;
 import com.example.juristicsupport.domain.mapper.JuristMapper;
 import com.example.juristicsupport.service.JuristService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -22,6 +23,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping(path = "jurists")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('ADMIN') || hasAuthority('ROLE_ADMIN')")
 public class JuristController {
 
     private final JuristMapper juristMapper;

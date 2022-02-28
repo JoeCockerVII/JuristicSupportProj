@@ -7,6 +7,8 @@ import com.example.juristicsupport.domain.dto.UserUpdateDto;
 import com.example.juristicsupport.domain.exception.EntityNotFoundException;
 import com.example.juristicsupport.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -34,7 +36,9 @@ public class UserController {
      * @param id user id
      * @return UserDto on JSON format
      */
+
     @GetMapping("/{userId}")
+    @PreAuthorize("hasRole('ADMIN') || hasAuthority('ROLE_ADMIN')")
     public UserDto get(@PathVariable(name = "userId") UUID id) {
         return Optional.of(id)
                 .map(userService::get)
@@ -49,6 +53,7 @@ public class UserController {
      * @return UserDto on JSON format
      */
     @PostMapping
+    @PostAuthorize("hasRole('ADMIN') || hasAuthority('ROLE_ADMIN')")
     public UserDto create(@RequestBody UserCreateDto createDto) {
         return Optional.ofNullable(createDto)
                 .map(userMapper::fromCreateDto)
@@ -65,6 +70,7 @@ public class UserController {
      * @return UserDto on JSON format
      */
     @PatchMapping("/{userId}")
+    @PreAuthorize("hasAnyRole('ADMIN','CUSTOMER') || hasAnyAuthority('ROLE_ADMIN','ROLE_CUSTOMER')")
     public UserDto update(@PathVariable(name = "userId") UUID id, @RequestBody UserUpdateDto updateDto) {
         return Optional.ofNullable(updateDto)
                 .map(userMapper::fromUpdateDto)
@@ -75,10 +81,10 @@ public class UserController {
 
     /**
      * Delete user
-     *
      * @param id of user
      */
     @DeleteMapping("/{userId}")
+    @PreAuthorize("hasAnyRole('ADMIN','CUSTOMER') || hasAnyAuthority('ROLE_ADMIN','ROLE_CUSTOMER')")
     public void delete(@PathVariable(name = "userId") UUID id) {
         userService.delete(id);
     }
