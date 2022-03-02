@@ -1,6 +1,7 @@
 package com.example.juristicsupport.domain.dto;
 
 import com.example.juristicsupport.domain.entity.Support;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
@@ -18,6 +19,8 @@ import static lombok.AccessLevel.PRIVATE;
 @Builder
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
+@Schema(name = "OrderCreate", description = "Create order")
 public class OrderCreateDto {
+    @Schema(description = "Types of dupports needs in Order")
     List<Integer> supportsId;
 }

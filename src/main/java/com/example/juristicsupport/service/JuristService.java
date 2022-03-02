@@ -49,4 +49,14 @@ public interface JuristService {
      * @return Jurist Entity
      */
     Jurist getFreeJurist();
+
+    /**
+     * Get jurist by id and set busyStatus
+     *
+     * @param id     of jurist
+     * @param status of jurist
+     * @return Jurist Entity
+     */
+    Jurist juristBysyStatusSet(UUID id, Integer status);
+
 }

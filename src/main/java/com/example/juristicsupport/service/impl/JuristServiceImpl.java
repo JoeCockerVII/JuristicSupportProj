@@ -67,4 +67,14 @@ public class JuristServiceImpl implements JuristService {
         juristReporsitory.save(jurist);
         return jurist;
     }
+
+    @Override
+    @Transactional
+    public Jurist juristBysyStatusSet(UUID id, Integer status) {
+        Jurist jurist = juristReporsitory.getById(id);
+        jurist.setBusyStatus(status);
+        juristReporsitory.save(jurist);
+        return jurist;
+    }
+
 }

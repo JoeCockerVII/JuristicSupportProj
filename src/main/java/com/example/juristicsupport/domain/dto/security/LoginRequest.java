@@ -1,5 +1,6 @@
 package com.example.juristicsupport.domain.dto.security;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
@@ -15,7 +16,10 @@ import static lombok.AccessLevel.PRIVATE;
 @Builder
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
+@Schema(name = "Login", description = "User login request")
 public class LoginRequest {
+    @Schema(description = "Email")
     String email;
+    @Schema(description = "Password")
     String password;
 }

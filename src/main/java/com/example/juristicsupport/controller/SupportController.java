@@ -6,6 +6,9 @@ import com.example.juristicsupport.domain.dto.SupportUpdateDto;
 import com.example.juristicsupport.domain.exception.EntityNotFoundException;
 import com.example.juristicsupport.domain.mapper.SupportMapper;
 import com.example.juristicsupport.service.SupportService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +26,10 @@ import java.util.UUID;
 @RestController
 @RequestMapping(path = "supports")
 @RequiredArgsConstructor
+@Tag(name = "Support", description = "Controller to work with Support Entity")
+@ApiResponse(responseCode = "500", description = "Internal error")
+@ApiResponse(responseCode = "404", description = "Support not found")
+@ApiResponse(responseCode = "403", description = "Access Denied")
 @PreAuthorize("hasRole('ADMIN') || hasAuthority('ROLE_ADMIN')")
 public class SupportController {
 
@@ -35,8 +42,9 @@ public class SupportController {
      * @param id support id
      * @return SupportDto on JSON format
      */
+    @Operation(description = "Find support by supportId")
+    @ApiResponse(responseCode = "200", description = "Support found")
     @GetMapping("/{supportId}")
-//    @PreAuthorize("hasRole('ADMIN') || hasAuthority('ROLE_ADMIN')")
     public SupportDto get(@PathVariable(name = "supportId") Integer id) {
         return Optional.of(id)
                 .map(supportService::get)
@@ -50,8 +58,9 @@ public class SupportController {
      * @param createDto SupportCreateDto
      * @return SupportDto on JSON format
      */
+    @Operation(description = "Update support by id")
+    @ApiResponse(responseCode = "200", description = "Support updated")
     @PostMapping
-//    @PreAuthorize("hasRole('ADMIN') || hasAuthority('ROLE_ADMIN')")
     public SupportDto create(@RequestBody SupportCreateDto createDto) {
 
         return Optional.ofNullable(createDto)
@@ -68,8 +77,9 @@ public class SupportController {
      * @param updateDto SupportUpdateDto
      * @return SupportDto on JSON format
      */
+    @Operation(description = "Remove support by id")
+    @ApiResponse(responseCode = "204", description = "Support removed")
     @PatchMapping("/{supportId}")
-//    @PreAuthorize("hasRole('ADMIN') || hasAuthority('ROLE_ADMIN')")
     public SupportDto update(@PathVariable(name = "supportId") Integer id, @RequestBody SupportUpdateDto updateDto) {
         return Optional.ofNullable(updateDto)
                 .map(supportMapper::fromUpdateDto)
@@ -83,7 +93,6 @@ public class SupportController {
      * @param id of support
      */
     @DeleteMapping("/{id}")
-//    @PreAuthorize("hasRole('ADMIN') || hasAuthority('ROLE_ADMIN')")
     public void delete(@PathVariable(name = "id") UUID id) {
         supportService.delete(id);
     }

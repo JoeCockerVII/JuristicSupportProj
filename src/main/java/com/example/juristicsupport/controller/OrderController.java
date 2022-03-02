@@ -5,6 +5,9 @@ import com.example.juristicsupport.domain.dto.OrderDto;
 import com.example.juristicsupport.domain.exception.EntityNotFoundException;
 import com.example.juristicsupport.domain.mapper.OrderMapper;
 import com.example.juristicsupport.service.OrderService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +25,10 @@ import java.util.*;
 @RestController
 @RequestMapping()
 @RequiredArgsConstructor
+@Tag(name = "Order", description = "Controller to work with Order Entity")
+@ApiResponse(responseCode = "500", description = "Internal error")
+@ApiResponse(responseCode = "404", description = "Order not found")
+@ApiResponse(responseCode = "403", description = "Access Denied")
 public class OrderController {
 
     private final OrderMapper orderMapper;
@@ -33,6 +40,8 @@ public class OrderController {
      * @param orderId
      * @return JuristDto on JSON format
      */
+    @Operation(description = "Find order by id")
+    @ApiResponse(responseCode = "200", description = "Order found")
     @GetMapping("report/orders/{orderId}")
     @PreAuthorize("hasAnyRole('ADMIN','CUSTOMER') || hasAnyAuthority('ROLE_ADMIN','ROLE_CUSTOMER')")
     public OrderDto get(@PathVariable UUID orderId) {
@@ -48,6 +57,8 @@ public class OrderController {
      * @param createDto orderCreateDto
      * @return OrderDto on JSON format
      */
+    @Operation(description = "Add order")
+    @ApiResponse(responseCode = "200", description = "Order added")
     @PostMapping("users/{userId}/orders")
     @PreAuthorize("hasRole('CUSTOMER') || hasAuthority('ROLE_CUSTOMER')")
     public OrderDto create(@PathVariable UUID userId, @RequestBody OrderCreateDto createDto) {
@@ -65,6 +76,8 @@ public class OrderController {
      * @param userId
      * @param orderId
      */
+    @Operation(description = "Remove order by id")
+    @ApiResponse(responseCode = "204", description = "Order removed")
     @DeleteMapping("users/{userId}/orders/{orderId}")
     @PreAuthorize("hasAnyRole('ADMIN','CUSTOMER') || hasAnyAuthority('ROLE_ADMIN','ROLE_CUSTOMER')")
     public void delete(@PathVariable UUID userId, @PathVariable UUID orderId) {

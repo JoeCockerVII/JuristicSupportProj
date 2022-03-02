@@ -72,6 +72,7 @@ public class OrderServiceImpl implements OrderService {
     public void delete(UUID userId, UUID orderId) {
         final Order toDelete = orderRepository.findById(orderId).orElseThrow();
         UUID juristId = toDelete.getJurist().getId();
+        juristService.juristBysyStatusSet(juristId, 0);
         userService.get(userId).removeOrder(toDelete);
         juristService.get(juristId).removeOrder(toDelete);
     }
