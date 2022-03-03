@@ -10,7 +10,6 @@ import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.juristicsupport.domain.entity.Role.ADMIN;
 import static com.example.juristicsupport.domain.entity.Role.CUSTOMER;
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.EnumType.STRING;

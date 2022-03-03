@@ -1,6 +1,5 @@
 package com.example.juristicsupport.domain.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +20,6 @@ import static lombok.AccessLevel.PRIVATE;
 @Builder
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
-//@JsonIgnoreProperties(value = {"hibernateLazyInitializer"})
 @Schema(description = "Order")
 public class OrderDto {
     @Schema(description = "Support id",

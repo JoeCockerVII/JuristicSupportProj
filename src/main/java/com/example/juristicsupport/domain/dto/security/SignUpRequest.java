@@ -1,6 +1,5 @@
 package com.example.juristicsupport.domain.dto.security;
 
-import com.example.juristicsupport.domain.dto.UserCreateDto;
 import com.example.juristicsupport.domain.entity.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
