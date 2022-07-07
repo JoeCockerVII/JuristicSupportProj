@@ -82,7 +82,8 @@ public class UserController {
     @Operation(description = "Update user by id")
     @ApiResponse(responseCode = "200", description = "User updated")
     @PatchMapping("/{userId}")
-    @PreAuthorize("hasAnyRole('ADMIN','CUSTOMER') || hasAnyAuthority('ROLE_ADMIN','ROLE_CUSTOMER')")
+    //@PreAuthorize("hasAnyRole('ADMIN','CUSTOMER') || hasAnyAuthority('ROLE_ADMIN','ROLE_CUSTOMER')")
+    @PostAuthorize("hasRole('ADMIN') || hasAuthority('ROLE_ADMIN')")
     public UserDto update(@PathVariable(name = "userId") UUID id, @RequestBody UserUpdateDto updateDto) {
         return Optional.ofNullable(updateDto)
                 .map(userMapper::fromUpdateDto)

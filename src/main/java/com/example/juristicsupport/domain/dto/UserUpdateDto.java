@@ -16,7 +16,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Builder
 @Jacksonized
 @AllArgsConstructor(access = PRIVATE)
-@Schema(name = "UserCreate", description = "Update parameters of user")
+@Schema(name = "UserUpdate", description = "Update parameters of user")
 public class UserUpdateDto {
     @Schema(description = "First name")
     String firstName;

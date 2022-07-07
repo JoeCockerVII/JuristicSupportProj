@@ -78,8 +78,8 @@ public class JuristController {
      */
     @Operation(description = "Update jurist by id")
     @ApiResponse(responseCode = "200", description = "Jurist updated")
-    @PatchMapping("/{juristId}")
-    public JuristDto update(@PathVariable(name = "juristId") UUID id, @RequestBody JuristUpdateDto updateDto) {
+    @PatchMapping("/{id}")
+    public JuristDto update(@PathVariable(name = "id") UUID id, @RequestBody JuristUpdateDto updateDto) {
         return Optional.ofNullable(updateDto)
                 .map(juristMapper::fromUpdateDto)
                 .map(toUpdate -> juristService.update(id, toUpdate))
